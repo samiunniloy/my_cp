@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define mx 100002
+int L[mx]; //লেভেল
+int P[mx][22]; //স্পার্স টেবিল
+int T[mx]; //প্যারেন্ট
+vector<int>g[mx];
+void dfs(int from, int u, int dep)
+{
+        cout << from << " " << u << endl;
+        T[u] = from;
+        L[u] = dep;
+        for(int i = 0; i < g[u].size(); i++) {
+                int v = g[u][i];
+                if(v == from) continue;
+                dfs(u, v, dep + 1);
+        }
+}
+
+void lca_init(int N)
+{
+        memset (P, -1, sizeof(P));
+        int i, j;
+        for (i = 0; i < N; i++)
+                P[i][0] = T[i];
+        for (j = 1; 1 << j < N; j++)
+                for (i = 0; i < N; i++)
+                        if (P[i][j - 1] != -1)
+                                P[i][j] = P[P[i][j - 1]][j - 1];
+}
+
+int lca_query(int n, int u, int v)
+{
+        int log, i;
+        if(L[u] < L[v]) {
+                swap(u, v);
+        }
+        log = 1;
+        while(1) {
+                int next = 1 + log;
+                if((1 << next) > L[u]) break;
+                log++;
+        }
+        for (i = log; i >= 0; i--)
+                if (L[u] - (1 << i) >= L[u]) {
+                        u = P[u][i];
+                }
+        if(u == v) return u;
+        for (i = log; i >= 0; i--)
+                if (P[u][i] != -1 && P[u][i] != P[v][i]) {
+                        u = P[u][i], v = P[v][i];
+                }
+        return T[u];
+}
+
+int main(void)
+{
+        int n, m, i, j, k;
+        cin >> n >> m;
+        for(i = 0; i < m; i++) {
+                cin >> j >> k;
+                g[j].push_back(k);
+                g[k].push_back(j);
+        }
+        dfs(1, 1, 0);
+        lca_init(5);
+        cin >> j >> k;
+        cout << lca_query(n, j, k) << endl;
+        return 0;
+}
+
