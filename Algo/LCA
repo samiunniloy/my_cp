@@ -1,9 +1,9 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define mx 100002
-int L[mx]; //লেভেল
-int P[mx][22]; //স্পার্স টেবিল
-int T[mx]; //প্যারেন্ট
+int L[mx]; 
+int P[mx][22];
+int T[mx];
 vector<int>g[mx];
 void dfs(int from, int u, int dep)
 {
