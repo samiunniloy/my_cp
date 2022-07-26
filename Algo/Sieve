@@ -1,5 +1,6 @@
 vector<int>prime;
 int mark[10000006];
+int cnt[10000006];
 void sieve()
 {
         for(int i = 2; i <= 10000006; i++) {
@@ -17,4 +18,16 @@ void sieve()
                         }
                 }
         }
+}
+main(){
+
+        int m=x[i];
+        while(m>1)
+        {
+           int k=mark[m];
+            cnt[k]++;
+            if(cnt[k]==2)q++;
+            while(m%k==0)m/=k;
+        }
+
 }
