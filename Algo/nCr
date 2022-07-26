@@ -1,0 +1,31 @@
+ll fact[N];
+
+void precal()
+{
+    fact[0] = 1;
+    for(ll i=1;i<N;i++)
+    {
+        fact[i] = (fact[i-1]*i)%mod;
+    }
+}
+
+ll bigmod(ll b,ll p)
+{
+    if(p==0)return 1;
+    if(p%2)
+ {
+        ll c = bigmod(b,p-1);
+        return (c*b)%mod;
+    }
+    else
+    {
+        ll c = bigmod(b,p/2);
+        return (c*c)%mod;
+    }
+}
+
+ll nCr(ll n,ll r)
+{
+    if(n<r)return 0;
+    return (fact[n] * bigmod((fact[r] * fact[n-r])%mod , mod-2))%mod;
+}
