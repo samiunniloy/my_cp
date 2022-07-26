@@ -1,0 +1,35 @@
+void built(int l,int r,int pos)
+{
+    if(l==r)
+    {
+        tree[pos]=arr[l];
+        return ;
+    }
+    int mid=(l+r)/2;
+    built(l,mid,pos*2);
+    built(mid+1,r,pos*2+1);
+    tree[pos]=tree[2*pos]+tree[pos*2+1];
+}
+
+void update(int l,int r,int pos,int i,int new_val)
+{
+    if(l>i||r<i) return ;
+    if(l>=i&&r<=i)
+    {
+        tree[pos]+=new_val;
+        return ;
+    }
+    int mid=(l+r)/2;
+    update(l,mid,pos*2, i,new_val);
+    update(mid+1,r,pos*2+1,i,new_val);
+    tree[pos]=tree[2*pos]+tree[2*pos+1];
+}
+
+long long  query(int l,int r,int pos,int ll,int rr)
+{
+    if(r<ll||l>rr) return 0;
+    if(rr>=r&&ll<=l) return tree[pos];
+    int mid=(l+r)/2;
+
+    return (query(l,mid,pos*2,ll,rr)+query(mid+1,r,pos*2+1,ll,rr));
+}
