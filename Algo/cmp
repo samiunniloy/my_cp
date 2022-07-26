@@ -1,0 +1,8 @@
+bool sortbysec(const pair<ll,ll> a,const pair<ll,ll> b)
+{
+    if (a.ff == b.ff)
+    {
+        return a.ss > b.ss;
+    }
+    return a.ff < b.ff;
+}
