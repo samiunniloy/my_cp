@@ -1,0 +1,19 @@
+int query(int i)
+{
+    int sm=0;
+    while(i>0)
+    {
+        sm+=bit[i];
+        i-=(i&-i);
+    }
+    return sm;
+}
+
+void update(int i,int n,int val)
+{
+    while(i<=n)
+    {
+        bit[i]+=val;
+        i+=(i&-i);
+    }
+}
