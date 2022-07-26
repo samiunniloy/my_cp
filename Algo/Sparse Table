@@ -1,0 +1,50 @@
+ll a[N];
+ll st[N][50];
+ll n,k;
+
+
+
+void sparse_table()
+{
+    for (ll i = 0; i < n; i++)
+        st[i][0] = a[i];
+
+    for (ll j = 1; j <= k; j++)
+        for (ll i = 0; i + (1 << j) <= n; i++)
+            st[i][j] = st[i][j-1] + st[i + (1 << (j - 1))][j - 1];
+
+}
+
+ll sparse_query(ll L,ll R)
+{
+    long long sum = 0;
+    for (ll j = k; j >= 0; j--) {
+        if ((1 << j) <= R - L + 1) {
+            sum += st[L][j];
+            L += 1 << j;
+        }
+    }
+    return sum;
+}
+
+
+void solve()
+{
+    cin>>n;
+    for0(i,n)
+    {
+        cin>>a[i];
+        k = max(k,(ll)(log2(a[i])));
+    }
+    k++;
+    sparse_table();
+    ll q;
+    cin>>q;
+    while(q--)
+    {
+        ll l,r;
+        cin>>l>>r;
+        l--,r--;
+        cout<<sparse_query(l,r)<<endl;
+    }
+}  
