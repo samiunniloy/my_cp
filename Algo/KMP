@@ -1,0 +1,16 @@
+void fun()
+{
+    int n=s.size();
+    int i=0,j=0,k,l;
+    for(i=1; i<n; i++)
+    {
+        j=pi[i-1];
+        while(s[j]!=s[i]&&j>0)
+        {
+            j=pi[j-1];
+        }
+        if(s[j]==s[i])
+            j++;
+          pi[i]=j;
+    }
+}
