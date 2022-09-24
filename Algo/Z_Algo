@@ -1,0 +1,26 @@
+void fun_z()
+{
+    int i,j,k,l=0,r=0;
+    for(i=1,l=0,r=0; i<s.size(); i++)
+    {
+        if(i>r)
+        {
+            l=r=i;
+            while(r<s.size()&&s[r-l]==s[r])r++;
+            z[i]=r-l;
+            r--;
+        }
+        else
+        {
+            k=i-l;
+            if (z[k] < r-i+1) z[i] = z[k];
+            else
+            {
+                l= i;
+                while (r < s.size() && s[r-l] == s[r]) r++;
+                z[i] = r-l;
+                r--;
+            }
+        }
+    }
+}
