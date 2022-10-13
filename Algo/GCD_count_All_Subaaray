@@ -1,0 +1,63 @@
+int lg [100009];
+int x[100009];
+int sp[100009][30];
+void init()
+{
+    lg[1]=0;
+    for(int i=2; i<100009; i++)lg[i]=(lg[i/2])+1;
+}
+void built(int n)
+{
+    int i,j,k;
+    for(i=0; i<n; i++)sp[i][0]=x[i];
+    for(j=1; j<30; j++)
+    {
+        for(i=0; i+(1<<j)<=n; i++)
+        {
+            sp[i][j]=__gcd(sp[i][j-1],sp[i+(1<<(j-1))][j-1]);
+        }
+    }
+}
+int query(int l,int r)
+{
+    int j=lg[r-l+1];
+    return __gcd(sp[l][j],sp[r-(1<<j)+1][j]);
+
+}
+void solve()
+{
+    int i,j,l,m,k,q,p,n;
+    init();
+    cin>>n;
+    for(i=0; i<n; i++)cin>>x[i];
+    built(n);
+    map<int,long long>mp;
+    for(i=0; i<n; i++)
+    {
+        int start=i;
+        while(start<n)
+        {
+            int ll=start,rr=n-1,mid;
+            int g=query(i,start);
+            while(ll<rr)
+            {
+                mid=(ll+rr)/2;
+                int val=query(i,mid);
+                if(val>=g)ll=mid+1;
+                else rr=mid;
+            }
+            mid=(ll+rr)/2;
+            if(query(i,mid)<g)mid--;
+            //  cout<<g<<" "<<mid<<" "<<i<<endl;
+            mp[g]+=(mid-start+1);
+            start=mid+1;
+        }
+    }
+    cin>>m;
+    while(m--)
+    {
+        cin>>j;
+        cout<<mp[j]<<endl;
+    }
+
+}
