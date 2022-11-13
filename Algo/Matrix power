@@ -1,0 +1,27 @@
+
+vector<vector<long long>> multi(vector<vector<long long>>a, vector<vector<long long>>b,long long n)
+{
+    vector<vector<long long>>mul(n, vector<long long>(n));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            mul[i][j] = 0;
+            for (int k = 0; k < n; k++)
+            {
+                mul[i][j] += a[i][k]*b[k][j];
+                mul[i][j]%=mod;
+            }
+        }
+    }
+    return mul;
+}
+
+vector<vector<long long>> expo(vector<vector<long long>>x,long long k,long long n)
+{
+    if(k==1)return x;
+    vector<vector<long long>>ans=expo(x,k/2,n);
+    ans=multi(ans,ans,n);
+    if(k%2)ans=multi(ans,x,n);
+    return ans;
+}
