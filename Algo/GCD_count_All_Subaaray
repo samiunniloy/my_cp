@@ -1,16 +1,20 @@
-int lg [100009];
-int x[100009];
-int sp[100009][30];
+long long lg [1000009];
+long long x[1000009];
+long long sp[1000009][32];
+long long mp[1000009];
 void init()
 {
     lg[1]=0;
-    for(int i=2; i<100009; i++)lg[i]=(lg[i/2])+1;
+    for(long long i=2; i<1000009; i++)
+    {
+        lg[i]=(lg[i/2])+1;
+    }
 }
-void built(int n)
+void built(long long n)
 {
-    int i,j,k;
+    long long i,j,k;
     for(i=0; i<n; i++)sp[i][0]=x[i];
-    for(j=1; j<30; j++)
+    for(j=1; j<31; j++)
     {
         for(i=0; i+(1<<j)<=n; i++)
         {
@@ -18,27 +22,26 @@ void built(int n)
         }
     }
 }
-int query(int l,int r)
+long long query(long long l,long long r)
 {
-    int j=lg[r-l+1];
+    long long j=lg[r-l+1];
     return __gcd(sp[l][j],sp[r-(1<<j)+1][j]);
 
 }
-void solve()
+void fun()
 {
-    int i,j,l,m,k,q,p,n;
+    long long i,j,l,m,k,q,p,n;
     init();
-    cin>>n;
-    for(i=0; i<n; i++)cin>>x[i];
+    n=1000000;
+    for(i=0; i<n; i++)x[i]=i+1;
     built(n);
-    map<int,long long>mp;
     for(i=0; i<n; i++)
     {
-        int start=i;
+        long long start=i;
         while(start<n)
         {
-            int ll=start,rr=n-1,mid;
-            int g=query(i,start);
+            long long ll=start,rr=n-1,mid;
+            long long g=query(i,start);
             while(ll<rr)
             {
                 mid=(ll+rr)/2;
@@ -53,11 +56,4 @@ void solve()
             start=mid+1;
         }
     }
-    cin>>m;
-    while(m--)
-    {
-        cin>>j;
-        cout<<mp[j]<<endl;
-    }
-
 }
