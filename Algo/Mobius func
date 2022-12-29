@@ -1,0 +1,45 @@
+//Number of coprime pair.
+
+long long cnt[1000009];
+long long f[1000009];
+long long mew[1000009];
+long long x[1000009];
+
+void mob(long long n)
+{  
+    long long i,j,k,mx=0;
+    for(i=0; i<n; i++)
+    {
+        cnt[x[i]]++;
+        mx=max(mx,x[i]);
+    }
+    mew[1]=1;
+    for(i=1; i<=mx; i++)
+    {
+        f[i]=cnt[i];
+        for(j=i+i; j<=mx; j+=i)
+        {
+            mew[j]+=(-1*mew[i]);
+            f[i]+=cnt[j];
+        }
+        f[i]=f[i]*(f[i]-1);
+        f[i]/=2;
+    }
+    //for(i=1;i<=mx;i++) cout<<mew[i]<<" "<<f[i]<<endl;
+}
+
+void solve()
+{
+    long long i,j,k,l,r,p,n,m;
+    cin>>n;
+    p=0;
+    for(i=0; i<n; i++)
+    {
+        cin>>x[i];
+        p=max(p,x[i]);
+    }
+    mob(n);
+    long long ans=0;
+    for(i=1; i<=p; i++) ans+=(f[i]*mew[i]);
+    cout<<ans<<endl;
+}
