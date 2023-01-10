@@ -1,0 +1,73 @@
+long long col[N],cnt[N],sz[N],ans[N],big[N];
+long long mx,res=0;
+vector<long long>v[N];
+ 
+void dfs_sz(long long u,long long p)
+{
+    sz[u]=1;
+    long long k=0;
+    for(auto it:v[u])
+    {
+        if(it==p)continue;
+        dfs_sz(it,u);
+        if(sz[it]>k)
+        {
+            k=sz[it];
+            big[u]=it;
+        }
+        sz[u]+=sz[it];
+    }
+ 
+}
+void add(long long u,long long p,long long x,long long bg)
+{
+    cnt[col[u]]+=x;
+    if(cnt[col[u]]>mx)
+    {
+        mx=cnt[col[u]];
+        res=col[u];
+    }
+    else if(mx==cnt[col[u]])
+    {
+        res+=col[u];
+    }
+    for(auto it:v[u])
+    {
+        if(it!=p&&it!=bg)
+        {
+            add(it,u,x,p);
+        }
+    }
+}
+ 
+void dfs(long long u,long long p,bool keep)
+{
+    for(auto it:v[u])
+    {
+        if(it!=big[u]&&it!=p)dfs(it,u,false);
+    }
+    res=0;
+    mx=0;
+    if(big[u])dfs(big[u],u,true);
+    add(u,p,1,big[u]);
+    ans[u]=res;
+    if(!keep)add(u,p,-1,0);
+}
+ 
+void solve()
+{
+    long long i,id,l,j,p,q,m,k,n;
+    cin>>n;
+    for(i=1; i<=n; i++)cin>>col[i];
+    for(i=1; i<n; i++)
+    {
+        cin>>j>>k;
+        v[j].pb(k);
+        v[k].pb(j);
+    }
+    dfs_sz(1,0);
+    dfs(1,0,false);
+    for(i=1; i<=n; i++)cout<<ans[i]<<" ";
+    cout<<endl;
+ 
+}
