@@ -1,0 +1,92 @@
+int tc=0,cnt,tim,id;
+vector<int>v[10009];
+bool f[10009];
+int tin[10009],low[10009],com[10009];
+vector<pair<int,int>>bridge;
+map<pair<int,int>,int>mp;
+vector<int>btree[10009];
+void dfs(int u,int p)
+{
+    tim++;
+    tin[u]=low[u]=tim;
+    f[u]=true;
+    for(auto it:v[u])
+    {
+        if(it==p)continue;
+        if(f[it])
+        {
+            low[u]=min(low[u],low[it]);
+            continue;
+        }
+        dfs(it,u);
+        low[u]=min(low[u],low[it]);
+        if(low[it]>tin[u])
+        {
+            bridge.pb({u,it});
+            mp[ {u,it}]++;
+            mp[ {it,u}]++;
+        }
+    }
+}
+void dfs1(int u,int comp)
+{
+    com[u]=comp;
+    f[u]=true;
+    for(auto it:v[u])
+    {
+        if(mp[ {u,it}]==0&&!f[it])
+        {
+            dfs1(it,comp);
+        }
+    }
+}
+
+void makeBridgeTree()
+{
+    for(auto it:bridge)
+    {
+        btree[com[it.xx]].pb(com[it.yy]);
+        btree[com[it.yy]].pb(com[it.xx]);
+    }
+}
+
+
+void solve()
+{
+    cnt=0;
+    tc++;
+    int  i,id,l,j,p,q,m,k,n;
+    cin>>n>>m;
+    bridge.clear();
+    mp.clear();
+
+    for(i=0; i<=n; i++)
+    {
+        btree[i].clear();
+        v[i].clear();
+        f[i]=false;
+        tin[i]=0;
+        low[i]=0;
+        com[i]=0;
+    }
+    for(i=0; i<m; i++)
+    {
+        cin>>j>>k;
+        v[j].pb(k);
+        v[k].pb(j);
+    }
+    tim=0;
+    cnt=0;
+    dfs(1,-1);
+    mem(f,false);
+    int comp=0;
+    for(i=0; i<n; i++)
+    {
+        if(!f[i])
+        {
+            dfs1(i,comp);
+            comp++;
+        }
+    }
+    makeBridgeTree();
+}
