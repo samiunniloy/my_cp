@@ -42,7 +42,7 @@ int lca_query(int n, int u, int v)
                 log++;
         }
         for (i = log; i >= 0; i--)
-                if (L[u] - (1 << i) >= L[u]) {
+                if (L[u] - (1 << i) >= L[v]) {
                         u = P[u][i];
                 }
         if(u == v) return u;
