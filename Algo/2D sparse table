@@ -1,0 +1,29 @@
+
+int ara[505][505];
+int sparse[505][505][16];
+
+void build()
+{
+    for(int k=0; (1<<k)<=n; k++)
+    {
+        for(int i=0; i+(1<<k)-1<n; i++)
+            for(int j=0; j+(1<<k)-1<n; j++)
+            {
+                if(k==0)
+                    sparse[i][j][k]=ara[i][j];
+                else
+                {
+                    int a=1<<(k-1);
+                    sparse[i][j][k]=max(max(sparse[i][j][k-1],sparse[i+a][j][k-1]),max(sparse[i][j+a][k-1],sparse[i+a][j+a][k-1]));
+                }
+            }
+    }
+}
+int tc=0;
+int rmq(int x1,int y1,int x2,int y2)
+{
+    int lg=log2(x2-x1+1);
+    int a=1<<lg;
+    a--;
+    return max(max(sparse[x1][y1][lg],sparse[x2-a][y1][lg]),max(sparse[x1][y2-a][lg],sparse[x2-a][y2-a][lg]));
+}
