@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define xx first
+#define yy second
+int  main()
+{
+    long long i,j,k,l,n;
+    cin>>n;
+    vector<pair<double,double>>v;
+    map<pair<double,double>,long long>mp;
+    for(i=0; i<n; i++)
+    {
+        cin>>j>>k;
+        mp[ {j,k}]=i;
+        v.push_back({j,k});
+    }
+    sort(v.begin(),v.end());
+    double best=1e17;
+    set<pair<double,double>>box;
+    box.insert({v[0].xx,v[0].yy});
+    long long id1,id2;
+    long long left=0;
+    for(i=1; i<n; i++)
+    {
+        while(left<i&&v[i].xx-v[left].xx>best)box.erase(v[left++]);
+        for(auto it=box.lower_bound(make_pair(v[i].xx-best,v[i].yy-best)); it!=box.end(); it++)
+        {
+            double dis=sqrtl(pow(v[i].xx-it->xx,2.0)+pow(v[i].yy-it->yy,2.0));
+            if(dis<best)
+            {
+                best=dis;
+                id1=mp[ {it->xx,it->yy}];
+                id2=mp[v[i]];
+            }
+        }
+        box.insert(v[i]);
+    }
+    cout<<setprecision(6)<<fixed;
+    if(id1>id2)swap(id1,id2);
+    cout<<id1<<" "<<id2<<" "<<best<<endl;
+    return 0;
+}
