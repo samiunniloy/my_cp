@@ -52,7 +52,7 @@ void builtSuffixArray()
         {
             arr[j].id=j;
             arr[j].tup[0]=sp[step-1][j];
-            arr[j].tup[1]=jump*2<=sz?sp[step-1][j+jump]:-1;
+            arr[j].tup[1]=jump+j<n?sp[step-1][j+jump]:-1;
         }
         sort(arr,arr+n);
         sp[step][arr[0].id]=0;
