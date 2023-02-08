@@ -60,9 +60,7 @@ void builtSuffixArray()
         {
             sp[step][arr[j].id]=arr[j].tup[0]==arr[j-1].tup[0]&&arr[j].tup[1]==arr[j-1].tup[1]?sp[step][arr[j-1].id]:j;
         }
-
     }
-
 }
 void builtLCP()
 {
@@ -98,7 +96,6 @@ void solve()
     cout<<endl;
 
 }
-
 main()
 {
     hi;
