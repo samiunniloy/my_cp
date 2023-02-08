@@ -12,7 +12,7 @@ using namespace std;
 #define endl "\n"
 # define test cout<<" mike_testing "
 #define N 10009
-#define mx 109
+//#define mx 109
 //priority_queue < pair< long long,  long long>, vector < pair <  long long,  long long >> , greater<pair< long long,  long long>> > qq;
 long long mod=1000000007;
 
@@ -27,55 +27,57 @@ long long bigmod( long long l,  long long r)
     return res% mod;
 }
 string s;
-int sz;
-int sp[18][N],step,tc,lcp[N]= {0};
+long long sz;
+long long sp[18][N],step,tc,lcp[N];
 struct node
 {
-    int tup[2],id;
+    long long tup[2],id;
     bool operator<(const node a) const
     {
         return tup[0]!=a.tup[0]?tup[0]<a.tup[0]:tup[1]<a.tup[1];
     }
+
 } arr[N];
 
 void builtSuffixArray()
 {
-    int n=s.size(),jump;
-    for(int j=0; j<n; j++)
+    long long n=s.size(),jump;
+    for(long long j=0; j<n; j++)
     {
         sp[0][j]=s[j];
-        memset(arr[j].tup,0,sizeof(arr[j].tup));
     }
-    for(step=1,jump=1; jump<=sz; step++,jump<<=1)
+    for(step=1,jump=1; jump<=n; step++,jump<<=1)
     {
-        for(int j=0; j<=n; j++)
+        for(long long j=0; j<n; j++)
         {
             arr[j].id=j;
             arr[j].tup[0]=sp[step-1][j];
-            arr[j].tup[1]=jump+j<n?sp[step-1][j+jump]:-1;
+            arr[j].tup[1]=(j+jump)<n?sp[step-1][j+jump]:-1;
         }
         sort(arr,arr+n);
         sp[step][arr[0].id]=0;
-        for(int j=1; j<n; j++)
+        int cnt=0;
+        for(long long j=0; j<n&&cnt<n; j++)
         {
-            sp[step][arr[j].id]=arr[j].tup[0]==arr[j-1].tup[0]&&arr[j].tup[1]==arr[j-1].tup[1]?sp[step][arr[j-1].id]:j;
+            sp[step][arr[j].id]=(j>0)&&arr[j].tup[0]==arr[j-1].tup[0]&&arr[j].tup[1]==arr[j-1].tup[1]?sp[step][arr[j-1].id]:cnt++;
         }
     }
 }
 void builtLCP()
 {
+    mem(lcp,0);
     lcp[0]=0;
-    int n=s.size(),i,j,id1,id2;
+    long long n=s.size(),i,j,id1,id2;
     for(i=1; i<n; i++)
     {
         id1=arr[i-1].id;
         id2=arr[i].id;
         lcp[i]=0;
-        for(j=step-1; j>=0; j--)
+        for(j=step-1; j>=0&&id1<n&&id2<n; j--)
         {
-            if(sp[j][id1]==sp[j][id2]&&sp[j][id2])
+            if(sp[j][id1]==sp[j][id2])
             {
-                lcp[i]+=1<<j;
+                lcp[i]+=(1<<j);
                 id1+=(1<<j);
                 id2+=(1<<j);
             }
@@ -86,22 +88,19 @@ void builtLCP()
 void solve()
 {
     tc++;
+    long long i,j,k,l,n,m,a,b;
+    s.clear();
     cin>>s;
-    sz=s.size();
     builtSuffixArray();
-    for(int i=0; i<s.size(); i++)cout<<arr[i].id<<" ";
-    cout<<endl;
     builtLCP();
-    for(int i=0;i<s.size();i++)cout<<lcp[i]<<" ";
-    cout<<endl;
-
 }
+
 main()
 {
     hi;
     long long t,i;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--) solve();
     return 0;
 }
