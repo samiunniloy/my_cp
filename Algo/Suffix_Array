@@ -1,0 +1,112 @@
+#pragma GCC optimize("Ofast")
+#include<bits/stdc++.h>
+using namespace std;
+#define hi ios::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define xx first
+#define yy second
+#define mem(a,d) memset(a,d,sizeof a)
+
+#define Maxn 1e18
+#define PI 2*acos(0.0)
+#define endl "\n"
+# define test cout<<" mike_testing "
+#define N 10009
+#define mx 109
+//priority_queue < pair< long long,  long long>, vector < pair <  long long,  long long >> , greater<pair< long long,  long long>> > qq;
+long long mod=1000000007;
+
+long long bigmod( long long l,  long long r)
+{
+    if(r == 0)
+        return 1;
+    long long res = bigmod(l, r / 2)% mod;
+    res = (res * res) % mod;
+    if(r & 1)
+        res = (res * l)% mod;
+    return res% mod;
+}
+string s;
+int sz;
+int sp[18][N],step,tc,lcp[N]= {0};
+struct node
+{
+    int tup[2],id;
+    bool operator<(const node a) const
+    {
+        return tup[0]!=a.tup[0]?tup[0]<a.tup[0]:tup[1]<a.tup[1];
+    }
+} arr[N];
+
+void builtSuffixArray()
+{
+    int n=s.size(),jump;
+    for(int j=0; j<n; j++)
+    {
+        sp[0][j]=s[j];
+        memset(arr[j].tup,0,sizeof(arr[j].tup));
+    }
+    for(step=1,jump=1; jump<=sz; step++,jump<<=1)
+    {
+        for(int j=0; j<=n; j++)
+        {
+            arr[j].id=j;
+            arr[j].tup[0]=sp[step-1][j];
+            arr[j].tup[1]=jump*2<=sz?sp[step-1][j+jump]:-1;
+        }
+        sort(arr,arr+n);
+        sp[step][arr[0].id]=0;
+        for(int j=1; j<n; j++)
+        {
+            sp[step][arr[j].id]=arr[j].tup[0]==arr[j-1].tup[0]&&arr[j].tup[1]==arr[j-1].tup[1]?sp[step][arr[j-1].id]:j;
+        }
+
+    }
+
+}
+void builtLCP()
+{
+    lcp[0]=0;
+    int n=s.size(),i,j,id1,id2;
+    for(i=1; i<n; i++)
+    {
+        id1=arr[i-1].id;
+        id2=arr[i].id;
+        lcp[i]=0;
+        for(j=step-1; j>=0; j--)
+        {
+            if(sp[j][id1]==sp[j][id2]&&sp[j][id2])
+            {
+                lcp[i]+=1<<j;
+                id1+=(1<<j);
+                id2+=(1<<j);
+            }
+        }
+    }
+}
+
+void solve()
+{
+    tc++;
+    cin>>s;
+    sz=s.size();
+    builtSuffixArray();
+    for(int i=0; i<s.size(); i++)cout<<arr[i].id<<" ";
+    cout<<endl;
+    builtLCP();
+    for(int i=0;i<s.size();i++)cout<<lcp[i]<<" ";
+    cout<<endl;
+
+}
+
+main()
+{
+    hi;
+    long long t,i;
+    t=1;
+    //cin>>t;
+    while(t--) solve();
+    return 0;
+}
+/*
+*/
