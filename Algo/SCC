@@ -1,0 +1,59 @@
+vector<int>v[N],rv[N];
+stack<int>stk;
+bool f[N];
+int mark[N],comp=0;
+map<pair<int,int>,int>mp;
+void dfs1(int u)
+{
+    f[u]=true;
+    for(auto it:v[u])if(!f[it])dfs1(it);
+    stk.push(u);
+}
+void dfs2(int u)
+{
+    f[u]=true;
+    mark[u]=comp;
+    for(auto it:rv[u])if(!f[it])dfs2(it);
+}
+void dfschk(int u)
+{
+    f[u]=true;
+    for(auto it:v[u])if(!f[it])dfschk(it);
+}
+void SCC(int n)
+{
+    mem(f,false);
+    for(int i=1; i<=n; i++)
+    {
+        if(!f[i])dfs1(i);
+    }
+    mem(f,false);
+    while(!stk.empty())
+    {
+        int u=stk.top();
+        stk.pop();
+        if(!f[u])
+        {
+            comp++;
+            dfs2(u);
+        }
+    }
+}
+void solve()
+{
+    int n,i,j,k,m;
+    cin>>n>>m;
+    for(i=1; i<=m; i++)
+    {
+        cin>>j>>k;
+        v[j].pb(k);
+        rv[k].pb(j);
+        mp[ {j,k}]++;
+    }
+    SCC(n);
+    for(i=1; i<=n; i++)
+    {
+        cout<<mark[i]<<" ";
+    }
+    cout<<endl;
+}
