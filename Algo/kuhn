@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define N 1007
+#define pb push_back
+#define xx first
+#define yy second
+#define mem(a,d) memset(a,d,sizeof a)
+
+int left[N],right[N],seen[N],n;
+vector<int>adj[N];
+bool kuhn(int u)
+{
+
+    for(int i=0; i<adj[u].size(); i++)
+    {
+        int v=adj[u][i];
+        if(seen[v])continue;
+        seen[v]=11;
+        if(right[v]==-1||khun(right[v]))
+        {
+            right[v]=u;
+            left[u]=v;
+            return true;
+        }
+    }
+    return false;
+}
+
+int bipertiteMatching()
+{
+    mem(left,-1);
+    mem(right,-1);
+    int cnt=0,i;
+    for(i=1; i<=n; i++)
+    {
+        mem(seen,0);
+        if(khun(i))cnt++;
+    }
+    return cnt++;
+}
